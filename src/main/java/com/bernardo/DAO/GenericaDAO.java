@@ -1,1 +1,0 @@
-        Type genericSuperClass = getClass().getGenericSuperclass();
