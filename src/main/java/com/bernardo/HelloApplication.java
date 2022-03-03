@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.bernardo;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
