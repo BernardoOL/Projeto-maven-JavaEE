@@ -27,19 +27,20 @@ private static final Long serialVersionUID = 1L;
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long idUsuario;
 
-@NotEmpty(message = "Nome não pode ser vazio")
-@Column(nullable = false, length = 50)
+
+@NotEmpty(message = "Nome não pode ser vazio")//Não pode ser vazio.
+@Column(nullable = false, length = 50)//Não pode ser nulo - limite de 50 caracteres
 private String nome;
 
 
-@Size(min = 5, max = 20)
-@NotEmpty(message = "Login não pode ser nulo")
-@Column(unique = true, nullable = false)
+@Size(min = 5, max = 20)//Mínimo e máximo
+@NotEmpty(message = "Login não pode ser nulo")//Não pode ser vazio.
+@Column(unique = true, nullable = false)//Tipo unico - Não pode ser nulo
 private String Login;
 
 @Size(min = 10)
 @NotEmpty(message = "Email não pode ser nulo")
-@Email 
+@Email //Fazer com que o campo seja email
 @Column(nullable = false)
 private String email;
 
@@ -49,10 +50,10 @@ private String email;
 private String senha;
 
 @Column(name = "data_de_nascimento", nullable = true)
-private LocalDate dataDeNascimento;
+private LocalDate dataDeNascimento;//Tipo LocalDate vai retornar somente a data
 
 @Column(name = "data_de_criacao",nullable = false)
-private LocalDateTime dataDeCriacao;
+private LocalDateTime dataDeCriacao;//Tipo LocalDateTime vai retornar data e hora
 
 @Column(name = "data_de_atualizacao",nullable = true)
 private LocalDateTime dataDeAtualizacao;
