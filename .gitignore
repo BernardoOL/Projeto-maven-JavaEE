@@ -24,6 +24,17 @@
 hs_err_pid*
 replay_pid*
 
+# Visual Studio Code
+.vscode
+.factorypath
+
+
+# IntelliJ
+.idea
+*.ipr
+*.iml
+*.iws
+
 ### Maven ###
 target/
 pom.xml.tag
