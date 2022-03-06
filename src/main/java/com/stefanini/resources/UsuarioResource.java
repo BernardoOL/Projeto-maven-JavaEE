@@ -20,12 +20,9 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
 import com.stefanini.dto.UsuarioDTO;
 import com.stefanini.entity.UsuarioEntity;
 import com.stefanini.services.UsuarioService;
-
-import io.netty.util.internal.EmptyArrays;
 
 
 @Path("/usuarios")
@@ -60,11 +57,10 @@ public class UsuarioResource {
             return Response.status(Response.Status.NO_CONTENT).entity(listarUsuarios).build();
         }
         return Response.status(Response.Status.OK).entity(listarUsuarios).build();
-
     }
 
     @POST
-    @Valid // Mostra o que está errado
+    @Valid 
     public Response criarUsuario(UsuarioDTO usuarioDTO) {
         UsuarioEntity usuarioEntity = new UsuarioEntity(usuarioService.criarUsuario(usuarioDTO));
         if (Objects.nonNull(usuarioEntity)) {
@@ -74,7 +70,7 @@ public class UsuarioResource {
     }
 
     @PUT
-    @Valid // Mostra o que está errado
+    @Valid 
     public Response atualizarUsuario(UsuarioDTO usuarioDTO) {
         UsuarioDTO usuarioUpdate = usuarioService.atualizarUsuario(usuarioDTO);
         return Response.status(Response.Status.OK).entity(usuarioUpdate).build();
@@ -85,6 +81,5 @@ public class UsuarioResource {
     public Response deletarUsuario(@PathParam("idUsuario") Long idUsuario) {
         usuarioService.deletarUsuario(idUsuario);
         return Response.status(Response.Status.ACCEPTED).build();
-
     }
 }

@@ -28,10 +28,10 @@ public class UsuarioRepository {
     }
 
     @Transactional
-    public UsuarioEntity criarUsuario(UsuarioDTO usuarioDTO){
+    public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO){
         UsuarioEntity usuarioEntity = new UsuarioEntity(usuarioDTO);
         usuarioDAO.save(usuarioEntity);
-        return usuarioEntity;
+        return new UsuarioDTO(usuarioEntity);
     }
 
     @Transactional
@@ -39,7 +39,6 @@ public class UsuarioRepository {
         UsuarioEntity usuarioEntity = new UsuarioEntity(usuarioDTO);
         usuarioDAO.update(usuarioEntity);
         return new UsuarioDTO(usuarioEntity);
-
     }
 
     @Transactional
