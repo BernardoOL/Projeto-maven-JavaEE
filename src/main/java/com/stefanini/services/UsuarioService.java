@@ -39,6 +39,7 @@ public class UsuarioService {
         usuarioDTO.setDataDeCriacao(LocalDateTime.now());
         
         if(usuarioDTO.getSenha().length() >=4 && usuarioDTO.getSenha().length() <= 10){
+            //criptografando a senha
             String senha = Base64.getEncoder().encodeToString(usuarioDTO.getSenha().getBytes());
             usuarioDTO.setSenha(senha);
             return usuarioRepository.criarUsuario(usuarioDTO);
@@ -57,6 +58,7 @@ public class UsuarioService {
 
         return usuarioRepository.atualizarUsuario(usuarioDTO);
         }else{
+            //criptografando a senha
             String senha = Base64.getEncoder().encodeToString(usuarioDTO.getSenha().getBytes());
             usuarioDTO.setSenha(senha);
             return usuarioRepository.atualizarUsuario(usuarioDTO);
