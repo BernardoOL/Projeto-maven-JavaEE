@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,7 @@ public class UsuarioService {
     public UsuarioService() {
     }
 
+    //CRUD
     public List<UsuarioDTO> listarUsuarios() {
         List<UsuarioEntity> list = usuarioRepository.listarUsuarios();
         return list.stream().map(UsuarioDTO::new).collect(Collectors.toList());
@@ -30,6 +32,42 @@ public class UsuarioService {
     public UsuarioDTO pegarUsuarioPorID(Long id) {
         return new UsuarioDTO(usuarioRepository.pegarUsuarioPorID(id));
     }
+
+    public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
+        UsuarioDTO usuarioNull = null;
+        usuarioDTO.setDataDeAtualizacao(LocalDateTime.now());
+        usuarioDTO.setDataDeCriacao(LocalDateTime.now());
+        
+        if(usuarioDTO.getSenha().length() >=4 && usuarioDTO.getSenha().length() <= 10){
+            String senha = Base64.getEncoder().encodeToString(usuarioDTO.getSenha().getBytes());
+            usuarioDTO.setSenha(senha);
+            return usuarioRepository.criarUsuario(usuarioDTO);
+        }else{
+            return usuarioNull;
+        }
+    }
+
+    public UsuarioDTO atualizarUsuario(UsuarioDTO usuarioDTO) {
+        UsuarioDTO usuario = new UsuarioDTO(usuarioRepository.pegarUsuarioPorID(usuarioDTO.getIdUsuario()));
+        usuarioDTO.setDataDeCriacao(usuario.getDataDeCriacao());
+        usuarioDTO.setDataDeAtualizacao(LocalDateTime.now());
+
+        if(usuarioDTO.getSenha().isEmpty()){
+            usuarioDTO.setSenha(usuario.getSenha());
+
+        return usuarioRepository.atualizarUsuario(usuarioDTO);
+        }else{
+            String senha = Base64.getEncoder().encodeToString(usuarioDTO.getSenha().getBytes());
+            usuarioDTO.setSenha(senha);
+            return usuarioRepository.atualizarUsuario(usuarioDTO);
+        }
+    }
+
+    public void deletarUsuario(Long idUsuario) {
+        usuarioRepository.deletarUsuario(idUsuario);
+    }
+
+    //OUTROS MÉTODOS
 
     public List<UsuarioDTO> pegarMes() {
         List<UsuarioEntity> listarUsuarios = new ArrayList<>();
@@ -42,21 +80,12 @@ public class UsuarioService {
         return listarUsuarios.stream().map(UsuarioDTO::new).collect(Collectors.toList());
     }
 
-    public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
-        usuarioDTO.setDataDeAtualizacao(LocalDateTime.now());
-        usuarioDTO.setDataDeCriacao(LocalDateTime.now());
-        return usuarioRepository.criarUsuario(usuarioDTO);
+    public List<String> pegarProvedores() {
+        List<String> listarProvedores = new ArrayList<>();
+        for (UsuarioEntity usuarioEntity : usuarioRepository.listarUsuarios()) {
+            String provedor = usuarioEntity.getEmail().substring(usuarioEntity.getEmail().indexOf("@"));
+            listarProvedores.add(provedor);
+        }
+        return listarProvedores;
     }
-
-    public UsuarioDTO atualizarUsuario(UsuarioDTO usuarioDTO) {
-        UsuarioDTO usuario = new UsuarioDTO(usuarioRepository.pegarUsuarioPorID(usuarioDTO.getIdUsuario()));
-        usuarioDTO.setDataDeCriacao(usuario.getDataDeCriacao());
-        usuarioDTO.setDataDeAtualizacao(LocalDateTime.now());
-        return usuarioRepository.atualizarUsuario(usuarioDTO);
-    }
-
-    public void deletarUsuario(Long idUsuario) {
-        usuarioRepository.deletarUsuario(idUsuario);
-    }
-
 }

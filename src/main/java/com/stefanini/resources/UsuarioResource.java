@@ -36,6 +36,7 @@ public class UsuarioResource {
     Calendar calendario = Calendar.getInstance();
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM");
 
+    //CRUD
     @GET
     public Response listarUsuarios() {
         List<UsuarioDTO> listarUsuarios = usuarioService.listarUsuarios();
@@ -49,22 +50,12 @@ public class UsuarioResource {
         return Response.status(Response.Status.OK).entity(usuarioDTO).build();
     }
 
-    @GET
-    @Path("/aniversariantes")
-    public Response pegarMes() {
-        List<UsuarioDTO> listarUsuarios = usuarioService.pegarMes();
-        if(listarUsuarios.isEmpty()){
-            return Response.status(Response.Status.NO_CONTENT).entity(listarUsuarios).build();
-        }
-        return Response.status(Response.Status.OK).entity(listarUsuarios).build();
-    }
-
     @POST
     @Valid 
     public Response criarUsuario(UsuarioDTO usuarioDTO) {
         UsuarioEntity usuarioEntity = new UsuarioEntity(usuarioService.criarUsuario(usuarioDTO));
         if (Objects.nonNull(usuarioEntity)) {
-            return Response.ok(new UsuarioDTO(usuarioEntity)).build();
+            return Response.status(Response.Status.CREATED).entity(new UsuarioDTO(usuarioEntity)).build();
         }
         return Response.status(Response.Status.BAD_REQUEST).entity("Ocorreu um erro na sua requisição").build();
     }
@@ -81,5 +72,27 @@ public class UsuarioResource {
     public Response deletarUsuario(@PathParam("idUsuario") Long idUsuario) {
         usuarioService.deletarUsuario(idUsuario);
         return Response.status(Response.Status.ACCEPTED).build();
+    }
+
+    //Outros End-points
+    
+    @GET
+    @Path("/aniversariantes")
+    public Response pegarMes() {
+        List<UsuarioDTO> listarUsuarios = usuarioService.pegarMes();
+        if(listarUsuarios.isEmpty()){
+            return Response.status(Response.Status.NO_CONTENT).entity(listarUsuarios).build();
+        }
+        return Response.status(Response.Status.OK).entity(listarUsuarios).build();
+    }
+
+    @GET
+    @Path("/provedores")
+    public Response pegarProvedores(){
+        List<String> listarProvedores = usuarioService.pegarProvedores();
+        if(listarProvedores.isEmpty()){
+            return Response.status(Response.Status.NO_CONTENT).entity(listarProvedores).build();
+        }
+        return Response.status(Response.Status.OK).entity(listarProvedores).build();
     }
 }

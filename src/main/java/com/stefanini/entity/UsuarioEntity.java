@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import java.util.Base64;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,7 +44,6 @@ private String Login;
 @Column(nullable = false)
 private String email;
 
-@Size(min = 4, max = 10)
 @NotEmpty(message = "senha não pode ser nulo")
 @Column(nullable = false)
 private String senha;
