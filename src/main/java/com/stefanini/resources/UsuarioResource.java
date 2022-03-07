@@ -36,6 +36,7 @@ public class UsuarioResource {
     Calendar calendario = Calendar.getInstance();
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM");
 
+    //CRUD
     @GET
     public Response listarUsuarios() {
         //Adicionando o método listarUsuarios em uma lista do tipo usuarioDTO
@@ -53,21 +54,6 @@ public class UsuarioResource {
         UsuarioDTO usuarioDTO = usuarioService.pegarUsuarioPorID(id);
         //Resposta para o front-end usando o verbo http 200 - OK
         return Response.status(Response.Status.OK).entity(usuarioDTO).build();
-    }
-
-    @GET
-    //Adicionando um path para fazer a consulta de aniversariantes do mês. Esse path não vai ser tratado como valor
-    @Path("/aniversariantes")
-    public Response pegarMes() {
-        //Pegando a lista de pessoas que passando na verificação de mês
-        List<UsuarioDTO> listarUsuarios = usuarioService.pegarMes();
-        //Caso não tenha ninguém na lista irá retornar um verbo http 204 - NO_CONTENT - Sem conteúdo
-        if(listarUsuarios.isEmpty()){
-            return Response.status(Response.Status.NO_CONTENT).entity(listarUsuarios).build();
-        }
-        //Caso tenha pessoas na lista irá retornar um verbo http 200 - OK 
-        return Response.status(Response.Status.OK).entity(listarUsuarios).build();
-
     }
 
     @POST
@@ -100,6 +86,35 @@ public class UsuarioResource {
         usuarioService.deletarUsuario(idUsuario);
         //Caso de tudo certo retornando um verbo http 202 - ACCEPTED - A requisição foi recebida mas nenhuma ação foi tomada sobre ela.
         return Response.status(Response.Status.ACCEPTED).build();
+    }
 
+    //OUTROS MÉTODOS
+
+    @GET
+    //Adicionando um path para fazer a consulta de aniversariantes do mês. Esse path não vai ser tratado como valor
+    @Path("/aniversariantes")
+    public Response pegarMes() {
+        //Pegando a lista de pessoas que passando na verificação de mês
+        List<UsuarioDTO> listarUsuarios = usuarioService.pegarMes();
+        //Caso não tenha ninguém na lista irá retornar um verbo http 204 - NO_CONTENT - Sem conteúdo
+        if(listarUsuarios.isEmpty()){
+            return Response.status(Response.Status.NO_CONTENT).entity(listarUsuarios).build();
+        }
+        //Caso tenha pessoas na lista irá retornar um verbo http 200 - OK 
+        return Response.status(Response.Status.OK).entity(listarUsuarios).build();
+
+    }
+
+    @GET
+    //Adicionando um path para fazer a consulta dos Provedores de email dos usuários. Esse path não vai ser tratado como valor
+    @Path("/provedores")
+    public Response pegarProvedores(){
+        List<String> listarProvedores = usuarioService.pegarProvedores();
+        //Caso não tenha email na lista irá retornar um verbo http 204 - NO_CONTENT - Sem conteúdo
+        if(listarProvedores.isEmpty()){
+            return Response.status(Response.Status.NO_CONTENT).entity(listarProvedores).build();
+        }
+        //Caso tenha email na lista irá retornar um verbo http 200 - OK 
+        return Response.status(Response.Status.OK).entity(listarProvedores).build();
     }
 }
