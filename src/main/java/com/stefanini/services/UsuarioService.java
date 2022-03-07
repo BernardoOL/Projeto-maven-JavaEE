@@ -22,6 +22,8 @@ public class UsuarioService {
     public UsuarioService() {
     }
 
+    //CRUD
+
     //Método para listar Usuarios
     public List<UsuarioDTO> listarUsuarios(){
         //Pegamos o que recebemos do listarUsuarios e colocamos ele dentro de uma lista
@@ -33,24 +35,6 @@ public class UsuarioService {
     public UsuarioDTO pegarUsuarioPorID(Long id){
         //Retornando um new UsuarioDTO com o Usuario que foi achado a partir do parâmetro recebido
         return new UsuarioDTO(usuarioRepository.pegarUsuarioPorID(id));
-    }
-
-    //Método para retornar os aniversáriantes de acordo com o mês atual
-    public List<UsuarioDTO> pegarMes(){
-        //Criando uma lista nova para adicionar a lista de aniversariantes do mês
-        List<UsuarioEntity> listarUsuarios = new ArrayList<>();
-        //passando um for no método listarUsuarios onde você recebe todos os usuários cadastrados no banco
-        for (UsuarioEntity UsuarioEntity : usuarioRepository.listarUsuarios()) {
-            //Criando uma variável usuarioMonth recebendo o atributo dataDeNascimento de cada usuário
-            LocalDate usuarioMonth = UsuarioEntity.getDataDeNascimento();
-            //If verificando se o mês do usuário é o mesmo mês da data atual da sua máquina.
-            if (usuarioMonth.getMonth() == LocalDate.now().getMonth()) {
-                //Método para adicionar o usuário na lista criada lá em cima(listarUsuarios)
-                listarUsuarios.add(UsuarioEntity);
-            }
-        }
-        //Retornando a lista de usuários depois do for
-        return listarUsuarios.stream().map(UsuarioDTO::new).collect(Collectors.toList());
     }
 
     //Método para criar um novo usuário
@@ -75,6 +59,39 @@ public class UsuarioService {
     public void deletarUsuario(Long idUsuario){
         //Chamando o método deletarUsuario da UsuarioRepository passando o id recebido como par
         usuarioRepository.deletarUsuario(idUsuario);
+    }
+
+    //OUTROS MÉTODOS
+
+    //Método para retornar os aniversáriantes de acordo com o mês atual
+    public List<UsuarioDTO> pegarMes(){
+        //Criando uma lista nova para adicionar a lista de aniversariantes do mês
+        List<UsuarioEntity> listarUsuarios = new ArrayList<>();
+        //passando um for no método listarUsuarios onde você recebe todos os usuários cadastrados no banco
+        for (UsuarioEntity UsuarioEntity : usuarioRepository.listarUsuarios()) {
+            //Criando uma variável usuarioMonth recebendo o atributo dataDeNascimento de cada usuário
+            LocalDate usuarioMonth = UsuarioEntity.getDataDeNascimento();
+            //If verificando se o mês do usuário é o mesmo mês da data atual da sua máquina.
+            if (usuarioMonth.getMonth() == LocalDate.now().getMonth()) {
+                //Método para adicionar o usuário na lista criada lá em cima(listarUsuarios)
+                listarUsuarios.add(UsuarioEntity);
+            }
+        }
+        //Retornando a lista de usuários depois do for
+        return listarUsuarios.stream().map(UsuarioDTO::new).collect(Collectors.toList());
+    }
+
+    //Métodos para pegar os provedores
+    public List<String> pegarProvedores() {
+        //Criando uma nova lista
+        List<String> listarProvedores = new ArrayList<>();
+        for (UsuarioEntity usuarioEntity : usuarioRepository.listarUsuarios()) {
+            //Pegando o usuario a partir do for e usando o substring para pegar a partir do @
+            String provedor = usuarioEntity.getEmail().substring(usuarioEntity.getEmail().indexOf("@"));
+            //Adicionando na lista
+            listarProvedores.add(provedor);
+        }
+        return listarProvedores;
     }
     
 }
