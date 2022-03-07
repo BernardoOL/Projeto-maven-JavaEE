@@ -25,7 +25,7 @@ public class UsuarioRepository {
         return usuarioDAO.listAll();
     }
 
-    //Criando o método para pegar usuários por is chamando o método findById a partir do UsuárioDAO
+    //Criando o método para pegar usuários por id chamando o método findById a partir do UsuárioDAO
     public UsuarioEntity pegarUsuarioPorID(Long id){
         //Procurando um usuário a partir do id que foi passado como parâmetro
         return usuarioDAO.findById(id);
