@@ -8,7 +8,6 @@ import javax.ws.rs.Consumes;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -21,8 +20,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.stefanini.dto.UsuarioDTO;
-import com.stefanini.entity.UsuarioEntity;
 import com.stefanini.services.UsuarioService;
+
+import io.smallrye.common.constraint.NotNull;
 
 
 @Path("/usuarios")
@@ -51,18 +51,12 @@ public class UsuarioResource {
     }
 
     @POST
-    @Valid 
-    public Response criarUsuario(UsuarioDTO usuarioDTO) {
-        UsuarioEntity usuarioEntity = new UsuarioEntity(usuarioService.criarUsuario(usuarioDTO));
-        if (Objects.nonNull(usuarioEntity)) {
-            return Response.status(Response.Status.CREATED).entity(new UsuarioDTO(usuarioEntity)).build();
-        }
-        return Response.status(Response.Status.BAD_REQUEST).entity("Ocorreu um erro na sua requisição").build();
+    public Response criarUsuario(@Valid @NotNull UsuarioDTO usuarioDTO) {
+            return Response.status(Response.Status.CREATED).entity(usuarioService.criarUsuario(usuarioDTO)).build();
     }
 
     @PUT
-    @Valid 
-    public Response atualizarUsuario(UsuarioDTO usuarioDTO) {
+    public Response atualizarUsuario(@Valid @NotNull UsuarioDTO usuarioDTO) {
         UsuarioDTO usuarioUpdate = usuarioService.atualizarUsuario(usuarioDTO);
         return Response.status(Response.Status.OK).entity(usuarioUpdate).build();
     }
@@ -79,20 +73,22 @@ public class UsuarioResource {
     @GET
     @Path("/aniversariantes")
     public Response pegarMes() {
-        List<UsuarioDTO> listarUsuarios = usuarioService.pegarMes();
-        if(listarUsuarios.isEmpty()){
-            return Response.status(Response.Status.NO_CONTENT).entity(listarUsuarios).build();
-        }
-        return Response.status(Response.Status.OK).entity(listarUsuarios).build();
+        return Response.status(Response.Status.OK).entity(usuarioService.listarAniversariantesDoMes()).build();
     }
 
     @GET
-    @Path("/provedores")
-    public Response pegarProvedores(){
-        List<String> listarProvedores = usuarioService.pegarProvedores();
-        if(listarProvedores.isEmpty()){
-            return Response.status(Response.Status.NO_CONTENT).entity(listarProvedores).build();
-        }
-        return Response.status(Response.Status.OK).entity(listarProvedores).build();
+    @Path("/inicial/{inicial}")
+    public Response listarInicialDoNome(@PathParam("inicial") String inicial){
+        return Response.status(Response.Status.OK).entity(usuarioService.listarInicialDoNome(inicial)).build();
     }
+
+    // @GET
+    // @Path("/provedores")
+    // public Response pegarProvedores(){
+    //     List<String> listarProvedores = usuarioService.pegarProvedores();
+    //     if(listarProvedores.isEmpty()){
+    //         return Response.status(Response.Status.NO_CONTENT).entity(listarProvedores).build();
+    //     }
+    //     return Response.status(Response.Status.OK).entity(listarProvedores).build();
+    // }
 }

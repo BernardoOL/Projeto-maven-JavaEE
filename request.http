@@ -1,1 +1,4 @@
-POST  http://localhost:8080/demo-1.0-SNAPSHOT/api/pessoas
+POST url HTTP/1.1
+header name: header value
+
+content http://localhost:8080/api/usuarios

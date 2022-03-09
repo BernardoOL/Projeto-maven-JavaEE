@@ -4,18 +4,17 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import java.util.Base64;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 import com.stefanini.dto.UsuarioDTO;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 
 @Entity
@@ -28,33 +27,27 @@ private static final Long serialVersionUID = 1L;
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long idUsuario;
 
-@NotEmpty(message = "Nome não pode ser vazio")
 @Column(nullable = false, length = 50)
 private String nome;
 
+@Column(unique = true, nullable = false, length = 20)
+private String login;
 
-@Size(min = 5, max = 20)
-@NotEmpty(message = "Login não pode ser nulo")
-@Column(unique = true, nullable = false)
-private String Login;
-
-@Size(min = 10)
-@NotEmpty(message = "Email não pode ser nulo")
-@Email 
 @Column(nullable = false)
 private String email;
 
-@NotEmpty(message = "senha não pode ser nulo")
 @Column(nullable = false)
 private String senha;
 
-@Column(name = "data_de_nascimento", nullable = true)
+@Column(name = "data_de_nascimento")
 private LocalDate dataDeNascimento;
 
-@Column(name = "data_de_criacao",nullable = false)
+@CreationTimestamp
+@Column(name = "data_de_criacao", nullable = false, updatable = false)
 private LocalDateTime dataDeCriacao;
 
-@Column(name = "data_de_atualizacao",nullable = true)
+@UpdateTimestamp
+@Column(name = "data_de_atualizacao")
 private LocalDateTime dataDeAtualizacao;
 
 public UsuarioEntity() {
@@ -63,7 +56,7 @@ public UsuarioEntity() {
 public UsuarioEntity(UsuarioDTO usuarioDTO) {
     this.idUsuario = usuarioDTO.getIdUsuario();
     this.nome = usuarioDTO.getNome();
-    this.Login = usuarioDTO.getLogin();
+    this.login = usuarioDTO.getLogin();
     this.email = usuarioDTO.getEmail();
     this.senha = usuarioDTO.getSenha();
     this.dataDeNascimento = usuarioDTO.getDataDeNascimento();
@@ -88,11 +81,11 @@ public void setNome(String nome) {
 }
 
 public String getLogin() {
-    return Login;
+    return login;
 }
 
 public void setLogin(String login) {
-    Login = login;
+    this.login = login;
 }
 
 public String getEmail() {
